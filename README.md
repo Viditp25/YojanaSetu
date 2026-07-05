@@ -1,10 +1,10 @@
-# 🇮🇳 JanSetu — Government Scheme Discovery & Analytics Platform
+# 🇮🇳 YojanaSetu — Government Scheme Discovery & Analytics Platform
 
-JanSetu is a data-driven platform built to improve discoverability and accessibility of Indian government schemes, scholarships, and welfare initiatives.
+YojanaSetu is a data-driven platform built to improve discoverability and accessibility of Indian government schemes, scholarships, and welfare initiatives.
 
 The platform enables users to search and filter schemes based on categories, beneficiaries, and scheme types while providing interactive analytics and policy insights through visual dashboards.
 
-Built using Python, Streamlit, SQLite, and public governance datasets, JanSetu combines analytics, public-impact technology, and user-focused design to simplify navigation of fragmented government information systems.
+Built using Python, Streamlit, SQLite, and public governance datasets, YojanaSetu combines analytics, public-impact technology, and user-focused design to simplify navigation of fragmented government information systems.
 
 ## 🚀 Key Features
 
