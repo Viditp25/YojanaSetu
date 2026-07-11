@@ -6,8 +6,8 @@ import plotly.express as px
 # ---------------- PAGE CONFIG ---------------- #
 
 st.set_page_config(
-    page_title="Government Scheme Discovery Platform",
-    page_icon="🇮🇳",
+    page_title="YojanaSetu",
+    page_icon="🏛️",
     layout="wide"
 )
 
@@ -26,17 +26,15 @@ category = st.sidebar.selectbox(
     ["All"] + sorted(df["category"].dropna().unique().tolist())
 )
 
-beneficiary = st.sidebar.selectbox(
-    "Select Beneficiary",
-    ["All"] + sorted(df["target_beneficiary"].dropna().unique().tolist())
-)
-
 scheme_type = st.sidebar.selectbox(
     "State or Central",
     ["All"] + sorted(df["state_or_central"].dropna().unique().tolist())
 )
 
-search = st.sidebar.text_input("Search Scheme")
+search = st.sidebar.text_input(
+    "Search Scheme",
+    placeholder="e.g. PM Kisan, Scholarship..."
+)
 
 # ---------------- FILTERING ---------------- #
 
@@ -47,10 +45,6 @@ if category != "All":
         filtered_df["category"] == category
     ]
 
-if beneficiary != "All":
-    filtered_df = filtered_df[
-        filtered_df["target_beneficiary"] == beneficiary
-    ]
 
 if scheme_type != "All":
     filtered_df = filtered_df[
@@ -68,7 +62,9 @@ if search:
 
 # ---------------- HEADER ---------------- #
 
-st.title("🇮🇳 Government Scheme Discovery Platform")
+st.title("🏛️ YojanaSetu")
+
+st.caption("Government Scheme Discovery & Analytics Platform")
 
 st.markdown("""
 Discover Indian government schemes, scholarships, and welfare programs through
@@ -77,7 +73,7 @@ interactive analytics and intelligent filtering.
 
 # ---------------- METRICS ---------------- #
 
-col1, col2, col3, col4 = st.columns(4)
+col1, col2, col3 = st.columns(3)
 
 col1.metric("Total Schemes", len(df))
 
@@ -87,12 +83,7 @@ col2.metric(
 )
 
 col3.metric(
-    "Beneficiaries",
-    df["target_beneficiary"].nunique()
-)
-
-col4.metric(
-    "Filtered Results",
+    "Filtered Schemes",
     len(filtered_df)
 )
 
@@ -100,7 +91,7 @@ st.divider()
 
 # ---------------- SEARCH RESULTS ---------------- #
 
-st.subheader("📋 Scheme Results")
+st.subheader("📋 Filtered Schemes")
 
 if len(filtered_df) > 0:
 
@@ -114,7 +105,8 @@ if len(filtered_df) > 0:
 
             with col1:
                 st.write(f"**Category:** {row['category']}")
-                st.write(f"**Beneficiary:** {row['target_beneficiary']}")
+                st.write(f"**Type:** {row['state_or_central']}")
+                st.write(f"**Launch Year:** {row['launched_year']}")
 
             with col2:
                 st.write(f"**Type:** {row['state_or_central']}")
@@ -169,20 +161,18 @@ st.plotly_chart(fig2, use_container_width=True)
 
 # ---------------- BENEFICIARY ANALYSIS ---------------- #
 
-beneficiary_counts = (
-    df["target_beneficiary"]
-    .value_counts()
-    .head(10)
+category_state = (
+    df.groupby(["category", "state_or_central"])
+    .size()
+    .reset_index(name="count")
 )
 
 fig3 = px.bar(
-    x=beneficiary_counts.index,
-    y=beneficiary_counts.values,
-    title="Top Beneficiary Groups",
-    labels={
-        "x": "Beneficiary",
-        "y": "Count"
-    }
+    category_state,
+    x="category",
+    y="count",
+    color="state_or_central",
+    title="Category-wise State vs Central Schemes"
 )
 
 st.plotly_chart(fig3, use_container_width=True)
