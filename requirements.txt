@@ -1,4 +1,7 @@
 streamlit
 pandas
 plotly
-
+python-dotenv
+google-genai
+openai
+gTTS

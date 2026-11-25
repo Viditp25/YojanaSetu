@@ -1,38 +1,58 @@
-# 🇮🇳 YojanaSetu — Government Scheme Discovery & Analytics Platform
+# YojanaSetu Voice — Multilingual Government Scheme Assistant & Analytics Platform
 
-YojanaSetu is a data-driven platform built to improve discoverability and accessibility of Indian government schemes, scholarships, and welfare initiatives.
+**YojanaSetu Voice** upgrades YojanaSetu into a voice-first, multilingual civic services assistant built for the **Scaler × Wispr Flow "India Runs on Voice" Hackathon (Civic Services Track)**.
 
-The platform enables users to search and filter schemes based on categories, beneficiaries, and scheme types while providing interactive analytics and policy insights through visual dashboards.
+> **Built With Voice:** This voice-first upgrade was architected and built hands-free using **Wispr Flow** inside **Antigravity IDE**.
 
-Built using Python, Streamlit, SQLite, and public governance datasets, YojanaSetu combines analytics, public-impact technology, and user-focused design to simplify navigation of fragmented government information systems.
+Citizens can speak or dictate naturally—without typing in English—to discover the top 3 matching Indian central and state welfare schemes along with **Eligibility**, **Documents Needed**, and **Official Website** links, plus **Text-to-Speech (`gTTS`)** playback and a full **Analytics Dashboard**.
 
-## 🚀 Key Features
+## Key Features
 
-* Intelligent scheme discovery
-* Beneficiary-focused filtering
-* Interactive analytics dashboards
-* State vs Central scheme analysis
-* Category-wise scheme insights
-* Searchable government scheme database
-* Official website integration
-* Real-time visual analytics
+* **Voice-First Discovery (Tab 1 — Default):**
+  * Supports **Hindi, Marathi, Telugu, Tamil, Kannada, Bengali, Hinglish, and English**.
+  * Regional mic recording via `st.audio_input` (transcribed with Gemini or OpenAI Whisper when configured) alongside a **Wispr-Flow-friendly** dictation box.
+  * Extracts **State, Age, Occupation/Beneficiary Type, and Need** from natural speech.
+  * Dynamically inspects SQLite tables and columns (`schemes.db` — 3,473 Q&A records across 96 schemes) and executes safe read-only `SELECT` queries via LLM (Gemini / OpenAI) with an automatic **offline multilingual keyword + fuzzy fallback**.
+  * Displays clean, mobile-friendly cards with **Scheme Name, Eligibility, Documents Needed, and Official Website**, plus hands-free **TTS audio playback** (`st.audio`).
+* **Analytics Dashboard (Tab 2):**
+  * Interactive Plotly visualizations for top scheme categories, State vs Central breakdown, category-wise distribution, and launch year trends.
+  * Sidebar filters for Category, State/Central level, and keyword search.
 
-## 🛠 Tech Stack
+## Tech Stack
 
-* Python
-* Streamlit
-* SQLite
-* Pandas
-* Plotly
+* **Frontend:** Streamlit (`st.tabs`, `st.audio_input`, `st.audio`, `st.pills`, `st.container(border=True)`)
+* **Database:** SQLite (`schemes.db`) with dynamic schema inspection
+* **Voice & AI:** Wispr Flow-compatible dictation, Gemini (`google-genai`), OpenAI (`openai`), `gTTS`
+* **Analytics:** Pandas, Plotly
 
-## 📊 Analytics Modules
+## Quickstart
 
-* Scheme category distribution
-* Beneficiary analysis
-* Launch year trends
-* Governance insights dashboard
-* State and Central scheme breakdown
+1. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## 🎯 Objective
+2. **Configure environment (optional for LLM & audio STT; offline fallback works out of the box):**
+   ```bash
+   cp .env.example .env
+   # Add GEMINI_API_KEY or OPENAI_API_KEY in .env
+   ```
 
-The project was developed to address the fragmented nature of government welfare information and improve discoverability for students, citizens, and beneficiaries through a centralized analytics-enabled platform.
+3. **Verify the voice query pipeline:**
+   ```bash
+   python test_voice_query.py
+   ```
+
+4. **Launch the Streamlit app:**
+   ```bash
+   streamlit run app.py
+   ```
+
+## Project Structure
+
+* `app.py` — Streamlit UI with `Voice Assistant` (default) and `Analytics Dashboard` tabs
+* `voice_assistant.py` — Dynamic SQLite schema inspector, multilingual entity extractor, LLM NL-to-SQL + offline fuzzy fallback, and `gTTS` audio synthesis
+* `schemes.db` — SQLite database of Indian government schemes (3,473 Q&A records across 96 schemes)
+* `test_voice_query.py` — Automated verification script for Hindi, Marathi, and English voice queries
+* `HACKATHON_SUBMISSION.md` — Round 1 Idea, Prompt, and Impact drafts for Track 01 (Civic Services)
+* `.env.example` — Environment variable template (no hardcoded secrets)

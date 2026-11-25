@@ -2,3 +2,6 @@ __pycache__/
 *.db
 *.zip
 .env
+*.mp3
+*.wav
+
